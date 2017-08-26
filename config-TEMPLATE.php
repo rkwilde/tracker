@@ -3,6 +3,8 @@
 	$hostname = 'hostname';
 	$username = 'mysqlusername';
 	$pw = 'mysqlpassword';
-	$database = 'tracker';
+	$database = 'dbname';
+
+	$table = 'tracker_table';
 
 ?>

@@ -1,12 +1,11 @@
 // actions
     // date selector
-        document.getElementById("dateHeader").innerHTML = "hi"; 
         var trackerObj;
         var dateStr;
         goToToday();
     // other actions
         document.getElementById("notes_perm").value = "";
-        document.getElementById("notes_temp").value = "";  
+        document.getElementById("notes_temp").value = "";
 
 // functions -- TABS
     function switchTabs(tabID)
@@ -17,11 +16,11 @@
             return "Different numbers of tabs and links!";
         for (var i=0; i<tabs.length; i++)
         {
-            if (tabs[i].id==tabID) 
+            if (tabs[i].id==tabID)
             {
                 tabs[i].style.display = "block";
                 tabLinks[i].style.backgroundColor = "#eee";
-            } 
+            }
             else
             {
                 tabs[i].style.display = "none";
@@ -31,10 +30,10 @@
     }
 
 // functions -- DATE
-    function dateToStr(dateVar) 
+    function dateToStr(dateVar)
     {
-        return dateVar.getFullYear() + '-' + 
-            ("0" + (dateVar.getMonth()+1)).slice(-2) + '-' + 
+        return dateVar.getFullYear() + '-' +
+            ("0" + (dateVar.getMonth()+1)).slice(-2) + '-' +
             ("0" + dateVar.getDate()).slice(-2);
     }
     function refresh()
@@ -42,13 +41,13 @@
         dateStr = document.getElementById("dateHeader").innerHTML;
         dataToFromDB("date=" + dateStr);
     }
-    function updateDate() 
+    function updateDate()
     {
         dateStr = document.getElementById("proposedDate").innerHTML;
         document.getElementById("dateHeader").innerHTML = dateStr;
         dataToFromDB("date=" + dateStr);
     }
-    function goToToday() 
+    function goToToday()
     {
         var curDate = new Date();
         dateStr = dateToStr(curDate);
@@ -59,7 +58,7 @@
         document.getElementById("proposedDate").innerHTML = dateStr;
         dataToFromDB("date=" + dateStr);
     }
-    function monthChange(delta) 
+    function monthChange(delta)
     {
         var month = document.getElementById("monthInput");
         var year = document.getElementById("yearInput");
@@ -74,7 +73,7 @@
         fixDayMax();
         setProposedDate();
     }
-    function dayChange(delta) 
+    function dayChange(delta)
     {
         var day = document.getElementById("dayInput");
         var month = document.getElementById("monthInput");
@@ -91,24 +90,24 @@
         }
         setProposedDate();
     }
-    function yearChange(delta) 
+    function yearChange(delta)
     {
         var year = document.getElementById("yearInput");
         year.innerHTML = Number(year.innerHTML) + delta;
         fixDayMax();
         setProposedDate();
     }
-    function setProposedDate() 
+    function setProposedDate()
     {
         var day = document.getElementById("dayInput");
         var month = document.getElementById("monthInput");
         var year = document.getElementById("yearInput");
         var pDate = document.getElementById("proposedDate");
-        pDate.innerHTML = year.innerHTML + '-' + 
-            ("0" + (month.innerHTML)).slice(-2) + '-' + 
+        pDate.innerHTML = year.innerHTML + '-' +
+            ("0" + (month.innerHTML)).slice(-2) + '-' +
             ("0" + day.innerHTML).slice(-2);
     }
-    function fixDayMax() 
+    function fixDayMax()
     {
         var day = document.getElementById("dayInput");
         var maxday = daysInMonth(
@@ -116,7 +115,7 @@
             Number(document.getElementById("yearInput").innerHTML) );
         if (Number(day.innerHTML) > maxday) day.innerHTML = maxday;
     }
-    function daysInMonth(monthNum,yearNum) 
+    function daysInMonth(monthNum,yearNum)
     {
         switch (monthNum) {
             case 1:
@@ -137,9 +136,9 @@
                 else return 28;
         }
     }
-    
+
 // functions -- CALORIES
-    function showCals() 
+    function showCals()
     {
         var calsElem = document.getElementById("cals")
         var exElem = document.getElementById("exercise");
@@ -151,7 +150,7 @@
         exElem.innerHTML = trackerObj.totalExercise;
         netElem.innerHTML = trackerObj.totalCalories - trackerObj.totalExercise;
     }
-    function logCals(c) 
+    function logCals(c)
     {
         document.getElementById("cals").style.color = "red";
         dataToFromDB("date=" + dateStr + "&calsToAdd=" + c);
@@ -160,25 +159,25 @@
         document.getElementById("exercise").style.color = "red";
         dataToFromDB("date=" + dateStr + "&exToAdd=" + e);
     }
-    function clearCals() 
+    function clearCals()
     {
         document.getElementById("cals").style.color = "red";
         dataToFromDB("date=" + dateStr + "&nullCals=yes");
     }
-    
+
 // functions -- NOTES
-    function addPermNoteFunc() 
+    function addPermNoteFunc()
     {
         addNoteFunc("notes_perm",false);
     }
-    function addTempNoteFunc() 
+    function addTempNoteFunc()
     {
         addNoteFunc("notes_temp",true);
     }
     function addNoteFunc(noteElement,temp) {
         var elem = document.getElementById(noteElement);
         var DBNoteStr = (temp) ? "&tempToAdd=" : "&notesToAdd=";
-        dataToFromDB("date=" + dateStr + DBNoteStr + 
+        dataToFromDB("date=" + dateStr + DBNoteStr +
             encodeURI(elem.value));
         elem.value = "";
     }
@@ -187,49 +186,49 @@
         editNoteFunc("displayPermNotes","editPermNoteButton","notes_perm",
             "addPermNoteButton","replacePermNoteFunc()");
     }
-    function editTempNoteFunc() 
+    function editTempNoteFunc()
     {
         editNoteFunc("displayTempNotes","editTempNoteButton","notes_temp",
             "addTempNoteButton","replaceTempNoteFunc()");
     }
-    function editNoteFunc(dispNotes,editNoteButton,notes,addNoteButton,replaceNoteFunc) 
+    function editNoteFunc(dispNotes,editNoteButton,notes,addNoteButton,replaceNoteFunc)
     {
         var dispCurrent = document.getElementById(dispNotes);
         var editButton = document.getElementById(editNoteButton);
         var addNotes = document.getElementById(notes);
-        var addButton = document.getElementById(addNoteButton); 
+        var addButton = document.getElementById(addNoteButton);
         dispCurrent.style.display = "none";
         editButton.style.display = "none";
         addNotes.value = dispCurrent.innerHTML;
         addButton.innerHTML = "Replace Note";
         addButton.setAttribute('onclick',replaceNoteFunc);
     }
-    function replacePermNoteFunc() 
+    function replacePermNoteFunc()
     {
         replaceNoteFunc("displayPermNotes","editPermNoteButton","notes_perm",
             "addPermNoteButton",'addPermNoteFunc()',false);
     }
-    function replaceTempNoteFunc() 
+    function replaceTempNoteFunc()
     {
         replaceNoteFunc("displayTempNotes","editTempNoteButton","notes_temp",
             "addTempNoteButton",'addTempNoteFunc()',true);
     }
-    function replaceNoteFunc(dispNotes,editNoteButton,notes,addNoteButton,addNoteFunc,temp) 
+    function replaceNoteFunc(dispNotes,editNoteButton,notes,addNoteButton,addNoteFunc,temp)
     {
         var dispCurrent = document.getElementById(dispNotes);
         var editButton = document.getElementById(editNoteButton);
         var addNotes = document.getElementById(notes);
-        var addButton = document.getElementById(addNoteButton); 
+        var addButton = document.getElementById(addNoteButton);
         var DBNoteStr = (temp) ? "&replaceTemp=" : "&replaceNotes=";
         dispCurrent.style.display = "block";
         editButton.style.display = "initial";
         addButton.innerHTML = "Add Note";
         addButton.setAttribute('onclick',addNoteFunc);
-        dataToFromDB("date=" + dateStr + DBNoteStr + 
+        dataToFromDB("date=" + dateStr + DBNoteStr +
             encodeURI(addNotes.value));
     	addNotes.value = "";
     }
-    function showNotes() 
+    function showNotes()
     {
         var perm = document.getElementById("displayPermNotes");
         var editButtonPerm = document.getElementById("editPermNoteButton");
@@ -237,7 +236,7 @@
         var editButtonTemp = document.getElementById("editTempNoteButton");
         document.getElementById("notes_perm").value = "";
         document.getElementById("notes_temp").value = "";
-        perm.innerHTML = trackerObj.notes; 
+        perm.innerHTML = trackerObj.notes;
         if (trackerObj.notes == "") {
             perm.style.display = "none";
             editButtonPerm.style.display= "none";
@@ -254,19 +253,19 @@
             editButtonTemp.style.display= "initial";
         }
     }
-    function clearPermFunc() 
+    function clearPermFunc()
     {
         var addPerm = document.getElementById("notes_perm");
         addPerm.value = "";
     }
-    function clearTempFunc() 
+    function clearTempFunc()
     {
         var addTemp = document.getElementById("notes_temp");
         addTemp.value = "";
     }
-    
+
 // functions -- GENERAL
-    function dataToFromDB(str) 
+    function dataToFromDB(str)
     {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
@@ -278,15 +277,14 @@
                     showCals();
                     showNotes();
                 }
-                else 
+                else
                 {
                     document.getElementById("cals").style.color = 'blue';
                     document.getElementById("exercise").style.color = 'blue';
                 }
             }
         };
-        xhr.open("POST","db.php",true);
+        xhr.open("POST","controller/controllerAjax.php",true);
         xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
         xhr.send(str);
     }
-    
