@@ -1,0 +1,21 @@
+This project depends on a database connection.
+
+-------- STEP 1 --------
+	The database must have a table with the following structure (table name can change):
+
+	CREATE TABLE `tracker_table` (
+	  `rowNum` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	  `date` varchar(10) NOT NULL,
+	  `calories` int(11) DEFAULT NULL,
+	  `exercise` int(11) DEFAULT NULL,
+	  `notes` text NOT NULL,
+	  `temp` text NOT NULL
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-------- STEP 2 --------
+	Rename config-TEMPLATE.php to config.php and input your mysql connection variables
+	- hostname
+	- username
+	- password
+	- database
+	- table (tracker_table by default)

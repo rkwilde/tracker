@@ -1,0 +1,164 @@
+/*GENERAL*/
+    body
+    {
+        margin: 10px 30px;
+    }
+    
+    #dateHeader
+    {
+        /* display: inline-block; */
+        /* vertical-align: middle; */
+        /* margin-right: 0.5em; */
+        /* font-size: 1.75em; */
+        margin-bottom: 0.25em;
+    }
+    
+    h2
+    {
+        margin-top: 0.25em;
+    }
+
+/*TABS*/
+    
+    .tabMenu
+    {     
+        display: block;
+        overflow: hidden;
+        margin-top: 1em;
+        border: 1px solid gray;
+        border-bottom: none;
+    }
+    .tabLink
+    {
+        float: left;
+        padding: 1em;
+        background-color: inherit;   
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+    }
+    .tabContent
+    {
+        border: 1px solid gray;
+        padding: 0.5em;
+        display: block;
+    }
+    
+    
+    /*hide tabs*/
+     .tabContent
+    {
+        display: none;
+    }
+    /*unhide date tab by default*/
+    #calorieTab
+    {
+        display: block;
+    }
+    #calorieTabLink
+    {
+        background-color: #eee;
+    }
+
+/*BUTTONS*/
+    
+    button{
+        vertical-align: top;
+    }
+    button.big{
+        font-size: 15px;
+        min-height: 2em;
+        min-width: 7em;
+        overflow: hidden;
+        margin-bottom: 1em;
+        /* vertical-align: middle; */
+        /* transform: translate(0%,-50%); */
+    }
+    button.small{
+        font-size: 14px;
+        height: 3em;
+        /* width: 7em; */
+        /* overflow: hidden; */
+        vertical-align: middle;          
+    }
+    button.add{
+        background-color: #ccffcc;
+    }
+    button.undo{
+        background-color: #ffcccc;
+    }
+
+/* DATE AND CALORIE INCREMENTERS */
+    
+    div.dispTotal{
+        box-sizing: border-box;
+        font-size: 14px;
+        display: inline-block;
+        min-height: 2em;
+        text-align: center;
+        padding: 1em;
+        border: 1px solid black;
+    }
+    
+    div.container{
+        margin-bottom: 0.5em;
+    }
+    
+    div.container2{
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        padding: 0em;
+        margin: 0em 0.5em 1em 0em;
+    }
+    
+    div.numberTitle{
+        font-size: 0.9em;
+        font-weight: bold;
+        margin-bottom: 0.25em;
+    }
+    
+    div.numberDisplayer{
+        font-size: 1em;
+        padding: 0.25em 0em;
+    }
+    
+    div.numberDisplayer2{
+        font-size: 1.5em;
+        margin: 0em 0.5em;
+    }
+    
+    button.numberIncrementer{
+        font-size: 1.2em;
+        padding: 0.25em 1em;
+    }
+
+/* NOTES */
+    
+    .noteHeader{
+        margin-bottom: 0.5em;
+    }
+    
+    .dispNotes{
+        font-size: 0.8em;
+        font-family: sans-serif;
+        white-space: pre-wrap;
+        color: black;
+        border: 1px solid white;
+        max-width: 30em;
+    }
+    
+    textarea{
+        font-family: sans-serif;
+        font-size: 0.8em;
+        display: block;
+        margin-bottom: 1em;
+    }
+
+/* OTHER */
+    
+    pre{
+        overflow: scroll;
+        display: none;
+    }
+    
