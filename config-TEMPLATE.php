@@ -1,10 +1,13 @@
 <?php
 
-	$hostname = 'hostname';
-	$username = 'mysqlusername';
-	$pw = 'mysqlpassword';
-	$database = 'dbname';
+class Config {
+	public static $hostname = 'hostname';
+	public static $username = 'mysqlusername';
+	public static $pw = 'mysqlpassword';
+	public static $database = 'dbname';
 
-	$table = 'tracker_table';
+	public static $userTable = 'user';
+	public static $logTable = 'log';
+}
 
 ?>

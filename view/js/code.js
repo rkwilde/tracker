@@ -284,7 +284,7 @@
                 }
             }
         };
-        xhr.open("POST","controller/controllerAjax.php",true);
+        xhr.open("POST","controller/AjaxPassthru.php",true);
         xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
         xhr.send(str);
     }

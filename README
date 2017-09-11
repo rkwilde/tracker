@@ -3,7 +3,7 @@ This project depends on a database connection.
 -------- STEP 1 --------
 	The database must have a table with the following structure (table name can change):
 
-	CREATE TABLE `tracker_table` (
+	CREATE TABLE `log` (
 	  `rowNum` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	  `date` varchar(10) NOT NULL,
 	  `calories` int(11) DEFAULT NULL,
@@ -13,9 +13,10 @@ This project depends on a database connection.
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -------- STEP 2 --------
-	Rename config-TEMPLATE.php to config.php and input your mysql connection variables
+	Rename Config-TEMPLATE.php to Config.php and input your mysql connection variables
 	- hostname
 	- username
 	- password
 	- database
-	- table (tracker_table by default)
+	- userTable ('user' by default)
+	- logTable ('log' by default)
