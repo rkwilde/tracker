@@ -1,15 +1,24 @@
 This project depends on a database connection.
 
 -------- STEP 1 --------
-	The database must have a table with the following structure (table name can change):
+	The database should have two tables with the following structure:
 
-	CREATE TABLE `log` (
+	CREATE TABLE `nameOfLogTable` (
 	  `rowNum` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	  `date` varchar(10) NOT NULL,
 	  `calories` int(11) DEFAULT NULL,
 	  `exercise` int(11) DEFAULT NULL,
 	  `notes` text NOT NULL,
-	  `temp` text NOT NULL
+	  `temp` text NOT NULL,
+	  `person_id` int(11) NOT NULL
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+	CREATE TABLE `nameOfUserTable` (
+	  `person_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	  `email` varchar(254) NOT NULL,
+	  `pw` varchar(64) NOT NULL,
+	  `pw_hint` varchar(10) DEFAULT NULL,
+	  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -------- STEP 2 --------
@@ -17,6 +26,6 @@ This project depends on a database connection.
 	- hostname
 	- username
 	- password
-	- database
-	- userTable ('user' by default)
-	- logTable ('log' by default)
+	- database name
+	- name of user table
+	- name of log table

@@ -4,30 +4,12 @@
         var dateStr;
         goToToday();
     // other actions
-        document.getElementById("notes_perm").value = "";
-        document.getElementById("notes_temp").value = "";
-
-// functions -- TABS
-    function switchTabs(tabID)
-    {
-        var tabs = document.getElementsByClassName("tabContent");
-        var tabLinks = document.getElementsByClassName("tabLink");
-        if (tabs.length != tabLinks.length)
-            return "Different numbers of tabs and links!";
-        for (var i=0; i<tabs.length; i++)
-        {
-            if (tabs[i].id==tabID)
-            {
-                tabs[i].style.display = "block";
-                tabLinks[i].style.backgroundColor = "#eee";
-            }
-            else
-            {
-                tabs[i].style.display = "none";
-                tabLinks[i].style.backgroundColor = "inherit";
-            }
-        }
-    }
+        const notesPerm = document.getElementById("notes_perm");
+        const notesTemp = document.getElementById("notes_temp");
+        notesPerm.value = "";
+        notesTemp.value = "";
+        addPermEventListener();
+        addTempEventListener();
 
 // functions -- DATE
     function dateToStr(dateVar)
@@ -118,18 +100,9 @@
     function daysInMonth(monthNum,yearNum)
     {
         switch (monthNum) {
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 8:
-            case 10:
-            case 12:
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
                 return 31;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
+            case 4: case 6: case 9: case 11:
                 return 30;
             case 2:
                 if (yearNum % 4 == 0) return 29;
@@ -149,6 +122,13 @@
         calsElem.innerHTML = trackerObj.totalCalories;
         exElem.innerHTML = trackerObj.totalExercise;
         netElem.innerHTML = trackerObj.totalCalories - trackerObj.totalExercise;
+        var m = document.getElementById("msgCal");
+        if (trackerObj.msgCals === "") {
+            m.style.display = "none";
+        } else {
+            m.innerHTML = trackerObj.msgCals;
+            m.style.display = "block";
+        }
     }
     function logCals(c)
     {
@@ -183,11 +163,13 @@
     }
     function editPermNoteFunc()
     {
+        removePermEventListener();
         editNoteFunc("displayPermNotes","editPermNoteButton","notes_perm",
             "addPermNoteButton","replacePermNoteFunc()");
     }
     function editTempNoteFunc()
     {
+        removeTempEventListener();
         editNoteFunc("displayTempNotes","editTempNoteButton","notes_temp",
             "addTempNoteButton","replaceTempNoteFunc()");
     }
@@ -205,11 +187,13 @@
     }
     function replacePermNoteFunc()
     {
+        addPermEventListener();
         replaceNoteFunc("displayPermNotes","editPermNoteButton","notes_perm",
             "addPermNoteButton",'addPermNoteFunc()',false);
     }
     function replaceTempNoteFunc()
     {
+        addTempEventListener();
         replaceNoteFunc("displayTempNotes","editTempNoteButton","notes_temp",
             "addTempNoteButton",'addTempNoteFunc()',true);
     }
@@ -227,6 +211,24 @@
         dataToFromDB("date=" + dateStr + DBNoteStr +
             encodeURI(addNotes.value));
     	addNotes.value = "";
+    }
+    function handlePermEnter(e) {
+        if (e.keyCode === 13) addPermNoteFunc();
+    }
+    function handleTempEnter(e) {
+        if (e.keyCode === 13) addTempNoteFunc();
+    }
+    function addPermEventListener() {
+        notesPerm.addEventListener('keydown',handlePermEnter);
+    }
+    function addTempEventListener() {
+        notesTemp.addEventListener('keydown',handleTempEnter);
+    }
+    function removePermEventListener() {
+        notesPerm.removeEventListener('keydown',handlePermEnter);
+    }
+    function removeTempEventListener() {
+        notesTemp.removeEventListener('keydown',handleTempEnter);
     }
     function showNotes()
     {
@@ -252,6 +254,20 @@
             temp.style.display = "block";
             editButtonTemp.style.display= "initial";
         }
+        var m = document.getElementById("msgPerm");
+        if (trackerObj.msgPerm === "") {
+            m.style.display = "none";
+        } else {
+            m.innerHTML = trackerObj.msgPerm;
+            m.style.display = "block";
+        }
+        var m = document.getElementById("msgTemp");
+        if (trackerObj.msgTemp === "") {
+            m.style.display = "none";
+        } else {
+            m.innerHTML = trackerObj.msgTemp;
+            m.style.display = "block";
+        }
     }
     function clearPermFunc()
     {
@@ -272,7 +288,6 @@
             if (this.readyState == 4) {
                 if (this.status == 200)
                 {
-                    document.getElementById("demo").innerHTML = this.responseText;
                     trackerObj = JSON.parse(this.responseText);
                     showCals();
                     showNotes();
@@ -284,7 +299,7 @@
                 }
             }
         };
-        xhr.open("POST","controller/AjaxPassthru.php",true);
+        xhr.open("POST","index.php?page=ajax",true);
         xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
         xhr.send(str);
     }

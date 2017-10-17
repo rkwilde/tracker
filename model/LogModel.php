@@ -5,32 +5,37 @@ require_once("Model.php");
 class LogModel extends Model {
 
     // inherit $db, $userTable, $logTable
+    protected $userID;
 
-    public function __construct() {
+    public function __construct($userID) {
         parent::__construct();  // creates db connection, sets $logTable
+        $this->userID = $userID;
     }
 
     // update calories, exercise, notes in SQL
     function addCals($calsToAdd,$date) {
         $sql = $this->db->prepare(
-            "UPDATE $this->logTable
+            "UPDATE " . $this->logTable . "
                 SET calories = IFNULL(calories,0) + ?
-                WHERE date = ? ");
-        $sql->execute(array($calsToAdd,$date));
+                WHERE person_id = ?
+                    AND date = ? ");
+        $sql->execute(array($calsToAdd,$this->userID,$date));
     }
     function nullCals($date) {
         $sql = $this->db->prepare(
-            "UPDATE $this->logTable
+            "UPDATE " . $this->logTable . "
                 SET calories = NULL
-                WHERE date = ? ");
-        $sql->execute(array($date));
+                WHERE person_id = ?
+                    AND date = ? ");
+        $sql->execute(array($this->userID,$date));
     }
     function addExercise($exToAdd,$date) {
         $sql = $this->db->prepare(
-            "UPDATE $this->logTable
+            "UPDATE " . $this->logTable . "
                 SET exercise = IFNULL(exercise,0) + ?
-                WHERE date = ? ");
-        $sql->execute(array($exToAdd,$date));
+                WHERE person_id = ?
+                    AND date = ? ");
+        $sql->execute(array($exToAdd,$this->userID,$date));
     }
     function addNotes($notesToAdd,$date) {
         $sql = $this->db->prepare(
@@ -40,15 +45,17 @@ class LogModel extends Model {
                       notes,
                       if(notes="","","\n"),
                       ? )
-                WHERE date = ? ' );
-        $sql->execute(array($notesToAdd,$date));
+                WHERE person_id = ?
+                    AND date = ? ' );
+        $sql->execute(array($notesToAdd,$this->userID,$date));
     }
     function replaceNotes($replaceNotes,$date) {
         $sql = $this->db->prepare(
-            "UPDATE $this->logTable
+            "UPDATE " . $this->logTable . "
                 SET notes = ?
-                WHERE date = ? " );
-        $sql->execute(array($replaceNotes,$date));
+                WHERE person_id = ?
+                    AND date = ? " );
+        $sql->execute(array($replaceNotes,$this->userID,$date));
     }
     function addTemp($tempToAdd,$date) {
         $sql = $this->db->prepare(
@@ -58,15 +65,17 @@ class LogModel extends Model {
                         temp,
                         if(temp="","","\n"),
                         ? )
-                WHERE date = ? ');
-        $sql->execute(array($tempToAdd,$date));
+                WHERE person_id = ?
+                    AND date = ? ');
+        $sql->execute(array($tempToAdd,$this->userID,$date));
     }
     function replaceTemp($replaceTemp,$date) {
         $sql = $this->db->prepare(
-            "UPDATE $this->logTable
+            "UPDATE " . $this->logTable . "
                 SET temp = ?
-                WHERE date = ? ");
-        $sql->execute(array($replaceTemp,$date));
+                WHERE person_id = ?
+                    AND date = ? ");
+        $sql->execute(array($replaceTemp,$this->userID,$date));
     }
 
 
@@ -74,31 +83,34 @@ class LogModel extends Model {
     function dateRowExists($date) {
         $sql = $this->db->prepare(
             "SELECT 1
-                FROM $this->logTable
-                WHERE date = ? 
+                FROM " . $this->logTable . "
+                WHERE person_id = ?
+                    AND date = ? 
                 LIMIT 1 ");
-        $sql->execute(array($date)); 
+        $sql->execute(array($this->userID,$date)); 
         return ($sql->rowCount()>0);
     }
     
     // insert row for new date
     function insertDateRow($date) {
         $sql = $this->db->prepare(
-            'INSERT INTO
-                ' . $this->logTable . ' (date,notes,temp)
-                VALUES (?,"","")');
-        $sql->execute(array($date));
-        return $sql->rowCount()>0;
+            'INSERT INTO ' . $this->logTable . 
+                ' (date,notes,temp,person_id) VALUES (?,"","",?)');
+        $sql->execute(array($date,$this->userID));
+        if ($sql->rowCount()<=0) throw new RuntimeException(
+            "no row inserted. logTable:  date: $date, userID: $this->userID");
+        return true;
     }
 
     // clean up temporary stuff from over a week ago
     function cleanTemp() {
         $sql = $this->db->prepare(
-            "UPDATE  $this->logTable
+            "UPDATE " . $this->logTable . "
                 SET temp = ''
-                WHERE date < DATE_SUB(CURDATE(),INTERVAL 1 WEEK)
+                WHERE person_id = ?
+                    AND date < DATE_SUB(CURDATE(),INTERVAL 1 WEEK)
                 ");
-        $sql->execute();
+        $sql->execute(array($this->userID));
     }
 
     // select row and return associative array
@@ -106,13 +118,15 @@ class LogModel extends Model {
         $sql = $this->db->prepare(
             "SELECT
                 date,
+                person_id,
                 IFNULL(calories,0) as calories,
                 IFNULL(exercise,0) as exercise,
                 notes,
                 temp
-            FROM $this->logTable
-            WHERE date=?");
-        $sql->execute(array($date));
+            FROM " . $this->logTable . "
+            WHERE person_id = ?
+                AND date=?");
+        $sql->execute(array($this->userID,$date));
         if ($sql->rowCount()==0) return NULL;
         return $sql->fetch(PDO::FETCH_ASSOC);
     }

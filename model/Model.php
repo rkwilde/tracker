@@ -1,5 +1,5 @@
 <?php
-require_once("./../Config.php");
+require_once("Config.php");
 
 class Model {
     protected $db;
@@ -13,9 +13,13 @@ class Model {
             Config::$username,
             Config::$pw
         );
+        $regex = "/^[a-zA-Z0-9\$_]+$/";
+        if(!preg_match($regex,Config::$userTable) || !preg_match($regex,Config::$logTable))
+            throw new RuntimeException('Bad table name(s)');
         $this->userTable = Config::$userTable;
         $this->logTable = Config::$logTable;
     }
+
 }
 
 ?>
