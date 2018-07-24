@@ -1,3 +1,7 @@
+The Tracker project was one I made for myself so I could track my calories, exercise, and various life events. It was mainly a way to practice Javascript and AJAX, though it also required some PHP and SQL.
+
+The project had a few iterations. The first major one (commit 1) had similar back-end functionality, but terrible formatting and no users, login page, or controller classes.
+
 This project depends on a database connection.
 
 -------- STEP 1 --------
